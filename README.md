@@ -1,6 +1,10 @@
-# open-source
+# Electron-vite-tempalate
 
-An Electron application with Vue
+An Electron application with Vue.
+
+This repository will help me memo what I learn about electron.
+
+And I will build the point cloud viewer with this template. 
 
 ## Recommended IDE Setup
 
@@ -32,3 +36,7 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+## TODO
+
+- Point Cloud Viewer
