@@ -37,6 +37,70 @@ $ npm run build:mac
 $ npm run build:linux
 ```
 
+## Memo
+
+### Lifecycle
+
+```bash
+# pre-process
+will-finish-launching -> ready -> did-become-active
+
+# main process
+create-window -> browser-window-created -> ready-to-show
+                                            whenReady() { 
+                                                    # do someing 
+                                                }
+
+# close
+window-all-closed
+quit() { 
+        # do something 
+    }
+```
+
+### IPC main & IPC render
+
+#### Pattern 1: render process to main process
+```bash
+# renderer -> main
+electron.window.ipcRenderer.send() -> ipcMain.on()
+
+# main -> renderer
+ipcMainEvent.sender() -> window.ipcRenderer.on()
+ipcMainEvent.reply()
+```
+
+electron.window.ipcRenderer.send(`channel`, ...args)
+- `channel` string
+- ...args any[]
+
+ipcMain.on(`channel`, `listener`)
+- `channel` string
+- `listener` Function
+    - event IpcMainEvent
+    - ...args any[]
+
+IpcMainEvent Object extends Event
+- `processId Integer` - The internal ID of the renderer process that sent this message
+- `frameId Integer` - The ID of the renderer frame that sent this message
+- `returnValue any` - Set this to the value to be returned in a synchronous message
+- `sender WebContents` - Returns the webContents that sent the message
+- `senderFrame WebFrameMain Readonly` - The frame that sent this message
+- `ports MessagePortMain[]` - A list of MessagePorts that were transferred with this message
+- `reply Function` - A function that will send an IPC message to the renderer frame that sent the original message that you are currently handling. You should use this method to "reply" to the sent message in order to guarantee the reply will go to the correct process and frame.
+    - channel string
+    - ...args any[]
+
+ipcRenderer.on(`channel`, `listener`)
+- `channel` string
+- `listener` Function
+    - event IpcRendererEvent
+    - ...args any[]
+
+## Reference
+
+- [Electron official](https://www.electronjs.org/docs/latest/api/app)
+
 ## TODO
 
 - Point Cloud Viewer
