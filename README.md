@@ -47,16 +47,20 @@ will-finish-launching -> ready -> did-become-active
 
 # main process
 create-window -> browser-window-created -> ready-to-show
-                                            whenReady() { 
-                                                    # do someing 
-                                                }
+                                            whenReady()
 
 # close
 window-all-closed
-quit() { 
-        # do something 
-    }
+quit()
 ```
+
+`app.whenReady()`
+Returns `Promise<void>` - fulfilled when Electron is initialized. May be used as a convenient alternative to checking `app.isReady()` and subscribing to the ready event if the app is not `ready` yet.
+
+`app.quit()`
+Try to close all windows. The `before-quit` event will be emitted first. If all windows are successfully closed, the `will-quit` event will be emitted and by default the application will terminate.
+
+This method guarantees that all `beforeunload` and unload event handlers are correctly executed. It is possible that a window cancels the quitting by returning `false` in the `beforeunload` event handler.
 
 ### IPC main & IPC render
 
